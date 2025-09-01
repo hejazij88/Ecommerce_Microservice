@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6
+    container_name: catalog_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: catalog_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.49
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+      - "6831:6831/udp"
+
+
+  catalog.api:
+    build:
+      context: ..
+      dockerfile: src/services/catalog/Catalog.Api/Dockerfile
+    container_name: catalog_api
+    depends_on:
+      - mongo
+      - rabbitmq
+      - jaeger
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MONGO__CONNECTIONSTRING=mongodb://mongo:27017
+      - MONGO__DATABASE=CatalogDb
+    ports:
+      - "6001:80"
+      
+      
+      
+   
+volumes:
+  mongo_data:
