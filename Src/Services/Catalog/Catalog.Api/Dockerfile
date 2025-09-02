@@ -13,9 +13,8 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Src/Services/Catalog/Catalog.Api/Catalog.Api.csproj", "Src/Services/Catalog/Catalog.Api/"]
-COPY ["Src/Services/Catalog/Catalog.Applications/Catalog.Applications.csproj", "Src/Services/Catalog/Catalog.Applications/"]
-COPY ["Src/Services/Catalog/Catalog.Domain/Catalog.Domain.csproj", "Src/Services/Catalog/Catalog.Domain/"]
 COPY ["Src/Services/Catalog/Catalog.Infrastructure/Catalog.Infrastructure.csproj", "Src/Services/Catalog/Catalog.Infrastructure/"]
+COPY ["Src/Services/Catalog/Catalog.Domain/Catalog.Domain.csproj", "Src/Services/Catalog/Catalog.Domain/"]
 RUN dotnet restore "./Src/Services/Catalog/Catalog.Api/Catalog.Api.csproj"
 COPY . .
 WORKDIR "/src/Src/Services/Catalog/Catalog.Api"

@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   mongo:
     image: mongo:6
@@ -7,7 +6,6 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -19,7 +17,6 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-
   jaeger:
     image: jaegertracing/all-in-one:1.49
     container_name: jaeger
@@ -27,10 +24,8 @@ services:
       - "16686:16686"
       - "6831:6831/udp"
 
-
   catalog.api:
     build:
-      context: ..
       dockerfile: src/services/catalog/Catalog.Api/Dockerfile
     container_name: catalog_api
     depends_on:
@@ -42,10 +37,7 @@ services:
       - MONGO__CONNECTIONSTRING=mongodb://mongo:27017
       - MONGO__DATABASE=CatalogDb
     ports:
-      - "6001:80"
-      
-      
-      
-   
+      - "6001:8080"
+
 volumes:
   mongo_data:

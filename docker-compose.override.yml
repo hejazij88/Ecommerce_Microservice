@@ -1,0 +1,13 @@
+services:
+  mongo:
+    volumes:
+      - ./data/mongo:/data/db
+    restart: always
+
+  rabbitmq:
+    restart: always
+
+  catalog.api:
+    ports:
+      - "6002:80"   
+    restart: always
