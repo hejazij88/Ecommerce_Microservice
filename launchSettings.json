@@ -7,7 +7,8 @@
         "catalog.api": "StartWithoutDebugging",
         "jaeger": "StartWithoutDebugging",
         "mongo": "StartWithoutDebugging",
-        "rabbitmq": "StartWithoutDebugging"
+        "rabbitmq": "StartWithoutDebugging",
+        "basket.api": "StartDebugging"
       }
     }
   }

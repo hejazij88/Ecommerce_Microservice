@@ -39,5 +39,26 @@ services:
     ports:
       - "6001:8080"
 
+  basket.api:
+    build:
+      dockerfile: src/services/basket/Basket.Api/Dockerfile
+    container_name: basket_api
+    depends_on:
+      - rabbitmq
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
+      - RabbitMQ__ExchangeName=event_bus
+      - RabbitMQ__ExchangeType=topic
+      - RabbitMQ__DevBindQueue=true
+      - RabbitMQ__DevQueueName=dev_basket_checkout_q
+      - RabbitMQ__RoutingKey=basket.checkout
+    ports:
+      - "6002:80"
+
 volumes:
   mongo_data:
+
