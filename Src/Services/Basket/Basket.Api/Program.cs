@@ -17,6 +17,21 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket API", Version = "v1" });
 });
 
+// Redis connection
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetValue<string>("CacheSettings:ConnectionString");
+});
+
+// Health check For Redis
+builder.Services.AddHealthChecks()
+    .AddRedis(
+        builder.Configuration.GetValue<string>("CacheSettings:ConnectionString"),
+        "Redis Health",
+        Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy);
+
+
+
 autoBind:
 var settings = new RabbitMqSettings
 {
@@ -54,5 +69,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health");
+
 
 app.Run();
