@@ -57,7 +57,13 @@ services:
       - RabbitMQ__DevQueueName=dev_basket_checkout_q
       - RabbitMQ__RoutingKey=basket.checkout
     ports:
-      - "6002:80"
+      - "6003:8080"
+
+  redis:
+    image: "redis:alpine"
+    container_name: basket_redis
+    ports:
+      - "6379:6379"
 
 volumes:
   mongo_data:
