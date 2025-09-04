@@ -78,6 +78,17 @@ services:
     volumes:
       - order_data:/var/lib/postgresql/data
 
+  apigateway:
+    container_name: apigateway
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      dockerfile: ApiGateway/Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - catalog.api
+      - basket.api
+      - ordering.api
 
 
 volumes:
