@@ -65,6 +65,22 @@ services:
     ports:
       - "6379:6379"
 
+  orderdb:
+    image: postgres:latest
+    container_name: orderdb
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DB=OrderDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - order_data:/var/lib/postgresql/data
+
+
+
 volumes:
+  order_data:
   mongo_data:
 
