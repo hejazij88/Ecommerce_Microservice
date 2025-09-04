@@ -1,4 +1,4 @@
-using Catalog.Applications.Repository;
+﻿using Catalog.Applications.Repository;
 using Catalog.Domain.Entity;
 using Catalog.Infrastructure.Data;
 using Catalog.Infrastructure.Settings;
@@ -12,8 +12,14 @@ using static Catalog.Api.Dtos.Product_DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((cls, lc) => lc.WriteTo.Console());
+// Serilog Config
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.Seq("http://seq:5341") // 👈 لاگ‌ها می‌رن تو Seq
+    .CreateLogger();
 
+builder.Host.UseSerilog();
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("Mongo"));
 builder.Services.AddSingleton<MongoContext>();
 

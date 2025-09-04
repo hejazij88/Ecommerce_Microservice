@@ -89,6 +89,24 @@ services:
       - catalog.api
       - basket.api
       - ordering.api
+ 
+  identity.api:
+    container_name: identity.api
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      dockerfile: Identity.Api/Dockerfile
+    ports:
+      - "6006:80"
+
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    ports:
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y
+
+
 
 
 volumes:

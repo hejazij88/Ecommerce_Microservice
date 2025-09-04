@@ -1,8 +1,19 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Serilog Config
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.Seq("http://seq:5341") // 👈 لاگ‌ها می‌رن تو Seq
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 
 // JWT Auth
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -28,11 +39,11 @@ builder.Services.AddReverseProxy()
 
 var app = builder.Build();
 
-app.UseAuthentication();  
+app.UseAuthentication();
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("default", policy =>
-        policy.RequireAuthenticatedUser());
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireRole("Admin"));
 });
 
 app.MapReverseProxy();

@@ -1,4 +1,4 @@
-using Basket.Api.Message;
+﻿using Basket.Api.Message;
 using Basket.Api.Repositories;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -8,6 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console());
 
 // Add services to the container.
+
+// Serilog Config
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.Seq("http://seq:5341")
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Services.AddControllers();
 

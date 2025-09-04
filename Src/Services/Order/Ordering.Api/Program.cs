@@ -1,11 +1,19 @@
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Api.Consumers;
 using Ordering.Api.Data;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Serilog Config
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.Seq("http://seq:5341") // 👈 لاگ‌ها می‌رن تو Seq
+    .CreateLogger();
 
+builder.Host.UseSerilog();
 
 // PostgreSQL
 builder.Services.AddDbContext<OrderContext>(options =>
